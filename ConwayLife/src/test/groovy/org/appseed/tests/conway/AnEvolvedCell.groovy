@@ -66,29 +66,10 @@ class AnEvolvedCell extends ACell {
 		def parentCell = aCell.parent
 		def parentNeighborCell = Mock(Cell)
 		
-		// Sadly the following didn't work in Spock
-		// 1 * parentCell."$direction" >> parentNeighborCell
-		// So a if - else if  is needed
-		
-		if(direction=='north')
-			1 * parentCell.north >> parentNeighborCell
-		else if(direction=='south')
-			1 * parentCell.south >> parentNeighborCell
-		else if(direction=='southeast')
-			1 * parentCell.southeast >> parentNeighborCell
-		else if(direction=='northeast')
-			1 * parentCell.northeast >> parentNeighborCell
-		else if(direction=='southwest')
-			1 * parentCell.southwest >> parentNeighborCell
-		else if(direction=='northwest')
-			1 * parentCell.northwest >> parentNeighborCell
-		else if(direction=='east')
-			1 * parentCell.east >> parentNeighborCell
-		else if(direction=='west')
-			1 * parentCell.west >> parentNeighborCell
+		1 * parentCell."$direction" >> parentNeighborCell
 	}
 	
-	def 'has all neighbors with its LifeRule and they are EvolvedCell built from each parent\'s neighbor'() {
+	def 'has as neighbors an EvolvedCell built from the parent neighbor and with the same LifeRule'() {
 		given: 'a neighbor at a direction'
 			def aCell=new EvolvedCell(parent:parentCell, lifeRule: lifeRule)
 			def parentNeighborCell = Mock(Cell)
@@ -96,9 +77,7 @@ class AnEvolvedCell extends ACell {
 		when:
 			def neighborCell=aCell."$direction"	
 		then:
-			interaction {
-				defineInteractionsForAccessingNeighbor(aCell, direction) 
-			}
+			1 * parentCell."$direction" >> parentNeighborCell
 
 			neighborCell instanceof EvolvedCell
 			neighborCell.parent == parentNeighborCell
