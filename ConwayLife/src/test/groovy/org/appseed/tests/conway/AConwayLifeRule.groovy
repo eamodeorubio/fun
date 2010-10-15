@@ -6,6 +6,23 @@ import org.appseed.conway.Cell;
 import spock.lang.Specification;
 
 class AConwayLifeRule extends Specification {
+	def allPossibleStatesByAliveCount;
+	
+	def setupSpec() {
+		allPossibleStatesByAliveCount=[:]
+		def binary=[false, true];
+		def allPossibleStates=[binary,binary,binary,binary,binary,binary,binary,binary].combinations();
+		allPossibleStates.each { state ->
+			def lifeCount = state.count(true)
+			def statesWithCount=allPossibleStatesByAliveCount[lifeCount]
+			if(!statesWithCount){
+				statesWithCount=[]
+				allPossibleStatesByAliveCount[lifeCount]=statesWithCount
+			}
+			statesWithCount.add(state)
+		}
+	}
+	
 	def aCell=Mock(Cell)
 	def nCell=Mock(Cell)
 	def sCell=Mock(Cell)
@@ -17,7 +34,8 @@ class AConwayLifeRule extends Specification {
 	def swCell=Mock(Cell)
 	def lifeRule=new ConwayLifeRule()
 
-	def stubLifeState(nwLife, nLife, neLife, wLife, eLife, swLife, sLife, seLife) {
+	def stubLifeState(lifeState) {
+		
 		aCell.north >> nCell
 		aCell.northeast >> neCell
 		aCell.northwest >> nwCell
@@ -26,6 +44,8 @@ class AConwayLifeRule extends Specification {
 		aCell.south >> sCell
 		aCell.southeast >> swCell
 		aCell.southwest >> swCell
+
+		def (nwLife, nLife, neLife, wLife, eLife, swLife, sLife, seLife)=lifeState
 		
 		nCell.alive >> nLife
 		sCell.alive >> sLife
@@ -37,10 +57,17 @@ class AConwayLifeRule extends Specification {
 		swCell.alive >> swLife
 	}
 	
+	def lifeStatesWithNeighborsAlive(Object[] lifeCounts) {
+		def r=[]
+		for(lifeCount in lifeCounts)
+			r.addAll allPossibleStatesByAliveCount[lifeCount]
+		return r
+	}
+	
 	def 'says a cell with fewer than two live neighbours will become dead'() {
 		given: 
 			interaction {
-				stubLifeState(nwLife, nLife, neLife, wLife, eLife, swLife, sLife, seLife)
+				stubLifeState(lifeState)
 			}
 			
 		when:
@@ -56,22 +83,13 @@ class AConwayLifeRule extends Specification {
 			! isAlive
 		
 		where:
-			nwLife | nLife | neLife | wLife | eLife | swLife | sLife | seLife
-			false  | false | false  | false | false | false  | false | false
-			true   | false | false  | false | false | false  | false | false
-			false  | true  | false  | false | false | false  | false | false
-			false  | false | true   | false | false | false  | false | false
-			false  | false | false  | true  | false | false  | false | false
-			false  | false | false  | false | true  | false  | false | false
-			false  | false | false  | false | false | true   | false | false
-			false  | false | false  | false | false | false  | true  | false
-			false  | false | false  | false | false | false  | false | true
+			lifeState << lifeStatesWithNeighborsAlive(0, 1)
 	}
 	
 	def 'says a cell with more than three live neighbours will become dead'() {
 		given:
 			interaction {
-				stubLifeState(nwLife, nLife, neLife, wLife, eLife, swLife, sLife, seLife)
+				stubLifeState(lifeState)
 			}
 			
 		when:
@@ -87,95 +105,32 @@ class AConwayLifeRule extends Specification {
 			! isAlive
 		
 		where:
-			nwLife | nLife | neLife | wLife | eLife | swLife | sLife | seLife
-			true   | true  | true   | true  | true  | true   | true  | true
-			true   | false | true   | true  | true  | true   | true  | true
-			true   | false | true   | true  | true  | true   | false | true
-			false  | false | true   | true  | true  | true   | false | true
-			false  | false | true   | true  | true  | true   | false | false
-			false  | true  | true   | true  | true  | true   | true  | true
-			false  | true  | true   | false | true  | true   | true  | true
-			false  | true  | false  | true  | false | true   | true  | true
-			true   | false | true   | false | true  | false  | true  | false
+			lifeState << lifeStatesWithNeighborsAlive(4, 5, 6, 7, 8)
 	}
 	
 	def 'says a live cell with two or three live neighbours will become alive'() {
 		given:
 			interaction {
 				aCell.alive >> true
-				stubLifeState(nwLife, nLife, neLife, wLife, eLife, swLife, sLife, seLife)
+				stubLifeState(lifeState)
 			}
 		expect:
 			lifeRule.willBeAlive(aCell)
 		
 		where:
-			nwLife | nLife | neLife | wLife | eLife | swLife | sLife | seLife
-			true   | true  | true   | false | false | false  | false | false
-			false  | true  | true   | true  | false | false  | false | false
-			false  | false | true   | true  | true  | false  | false | false
-			false  | false | false  | true  | true  | true   | false | false
-			false  | false | false  | false | true  | true   | true  | false
-			false  | false | false  | false | false | true   | true  | true 
-			true   | true  | false  | true  | false | false  | false | false
-			false  | true  | true   | false | true  | false  | false | false
-			false  | false | true   | true  | false | true   | false | false
-			false  | false | false  | true  | true  | false  | true  | false
-			false  | false | false  | false | true  | true   | false | true
-			true   | false | false  | false | false | true   | true  | false
-			true   | false | false  | true  | false | true   | false | false
-			false  | true  | false  | false | true  | false  | true  | false
-			false  | false | true   | false | false | true   | false | true
-			false  | true  | false  | true  | false | false  | true  | false
-			false  | false | true   | false | true  | false  | false | true
-			true   | false | false  | true  | false | false  | true  | false
-			true   | false | true   | false | false | false  | false | false
-			false  | true  | false  | true  | false | false  | false | false
-			false  | false | true   | false | true  | false  | false | false
-			false  | false | false  | true  | false | true   | false | false
-			false  | false | false  | false | true  | false  | true  | false
-			false  | false | false  | false | false | true   | false | true
-			false  | true  | false  | true  | false | false  | false | false
-			false  | true  | false  | false | true  | false  | false | false
-			false  | false | true   | false | false | true   | false | false
-			false  | false | false  | true  | false | false  | true  | false
-			false  | false | false  | false | true  | false  | false | true
-			true   | false | false  | false | false | true   | false | false
-			true   | false | false  | true  | false | false  | false | false
-			false  | true  | false  | false | false | false  | true  | false
-			false  | false | true   | false | false | false  | false | true
-			false  | true  | false  | true  | false | false  | false | false
-			false  | false | true   | false | false | false  | false | true
-			true   | false | false  | false | false | false  | true  | false
+			lifeState << lifeStatesWithNeighborsAlive(2, 3)
 	}
 	
 	def 'says a dead cell with three live neighbours will become alive'() {
 		given:
 			interaction {
 				aCell.alive >> false
-				stubLifeState(nwLife, nLife, neLife, wLife, eLife, swLife, sLife, seLife)
+				stubLifeState(lifeState)
 			}
 		expect:
 			lifeRule.willBeAlive(aCell)
 		
 		where:
-			nwLife | nLife | neLife | wLife | eLife | swLife | sLife | seLife
-			true   | true  | true   | false | false | false  | false | false
-			false  | true  | true   | true  | false | false  | false | false
-			false  | false | true   | true  | true  | false  | false | false
-			false  | false | false  | true  | true  | true   | false | false
-			false  | false | false  | false | true  | true   | true  | false
-			false  | false | false  | false | false | true   | true  | true 
-			true   | true  | false  | true  | false | false  | false | false
-			false  | true  | true   | false | true  | false  | false | false
-			false  | false | true   | true  | false | true   | false | false
-			false  | false | false  | true  | true  | false  | true  | false
-			false  | false | false  | false | true  | true   | false | true
-			true   | false | false  | false | false | true   | true  | false
-			true   | false | false  | true  | false | true   | false | false
-			false  | true  | false  | false | true  | false  | true  | false
-			false  | false | true   | false | false | true   | false | true
-			false  | true  | false  | true  | false | false  | true  | false
-			false  | false | true   | false | true  | false  | false | true
-			true   | false | false  | true  | false | false  | true  | false
+			lifeState << lifeStatesWithNeighborsAlive(3)
 	}
 }
