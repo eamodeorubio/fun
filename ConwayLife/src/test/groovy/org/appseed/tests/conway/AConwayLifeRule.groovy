@@ -42,7 +42,7 @@ class AConwayLifeRule extends Specification {
 		aCell.east >> eCell
 		aCell.west >> wCell
 		aCell.south >> sCell
-		aCell.southeast >> swCell
+		aCell.southeast >> seCell
 		aCell.southwest >> swCell
 
 		def (nwLife, nLife, neLife, wLife, eLife, swLife, sLife, seLife)=lifeState
@@ -63,7 +63,7 @@ class AConwayLifeRule extends Specification {
 			r.addAll allPossibleStatesByAliveCount[lifeCount]
 		return r
 	}
-	
+
 	def 'says a cell with fewer than two live neighbours will become dead'() {
 		given: 
 			interaction {

@@ -10,9 +10,9 @@ abstract class ACell extends Specification {
 	def 'has neighbors at eight different directions'() {
 		given: 'a neighbor at a direction'
 			def aCell=newCell()
-			def neighborCell = aCell."$direction"
 		
 		when:
+			def neighborCell = aCell."$direction"
 			def neighborCellAgain = aCell."$direction"
 		then:
 			interaction {

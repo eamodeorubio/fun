@@ -70,7 +70,7 @@ class ASeedCell extends ACell {
 	
 	def 'has as neighbors SeedCells too, which are dead by default and have same LifeRule'() {
 		given: 'a neighbor at a direction'
-			def aCell=new SeedCell(alive:lifeValue, lifeRule: aLifeRule)
+			def aCell=new SeedCell(alive:lifeValue, lifeRule: lifeRule)
 			def neighborCell = aCell."$direction"
 			def neighborCellAgain = aCell."$direction"
 		expect:
@@ -101,7 +101,7 @@ class ASeedCell extends ACell {
 	
 	def 'can have alive neighbours if specified'() {
 		given:
-			def aCell=new SeedCell(alive:lifeValue, lifeRule: aLifeRule)
+			def aCell=new SeedCell(alive:lifeValue, lifeRule: lifeRule)
 		
 		when:
 			def neighbourCell=aCell."${direction}IsAlive"
@@ -132,7 +132,7 @@ class ASeedCell extends ACell {
 	
 	def 'cannot specify a neighbour as alive if it was already specified as dead'() {
 		given:
-			def aCell=new SeedCell(alive:lifeValue, lifeRule: aLifeRule)
+			def aCell=new SeedCell(alive:lifeValue, lifeRule: lifeRule)
 		
 		when:
 			def neighbourCell=aCell."$direction"
