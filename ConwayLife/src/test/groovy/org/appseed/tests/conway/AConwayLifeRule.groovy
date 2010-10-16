@@ -42,7 +42,7 @@ class AConwayLifeRule extends Specification {
 		aCell.east >> eCell
 		aCell.west >> wCell
 		aCell.south >> sCell
-		aCell.southeast >> swCell
+		aCell.southeast >> seCell
 		aCell.southwest >> swCell
 
 		def (nwLife, nLife, neLife, wLife, eLife, swLife, sLife, seLife)=lifeState
