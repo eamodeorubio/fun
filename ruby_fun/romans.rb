@@ -1,5 +1,6 @@
 class Fixnum 
 	def to_roman
+		return 'X' if self == 10
 		return 'V' if self == 5
 		'I'
 	end
@@ -12,5 +13,9 @@ describe "Roman number" do
 
 	it "V is equivalent to 5" do
 		5.to_roman.should == 'V'
+	end
+
+	it "X is equivalent to 10" do
+		10.to_roman.should == 'X'
 	end
 end
