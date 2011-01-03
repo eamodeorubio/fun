@@ -3,7 +3,7 @@ class Fixnum
 
 	def to_roman
 		return ARABIC_TO_ROMAN_NUMERAL[self] if ARABIC_TO_ROMAN_NUMERAL[self]
-		'II'
+		'I' + (self - 1).to_roman
 	end
 end
 
