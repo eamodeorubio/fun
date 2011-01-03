@@ -7,15 +7,23 @@ class Fixnum
 end
 
 describe "Roman number" do
-	it "I is equivalent to 1" do 
-		1.to_roman.should == 'I'
+	context "has basic numerals with different values" do
+		it "I is equivalent to 1" do 
+			1.to_roman.should == 'I'
+		end
+
+		it "V is equivalent to 5" do
+			5.to_roman.should == 'V'
+		end
+
+		it "X is equivalent to 10" do
+			10.to_roman.should == 'X'
+		end
 	end
 
-	it "V is equivalent to 5" do
-		5.to_roman.should == 'V'
-	end
-
-	it "X is equivalent to 10" do
-		10.to_roman.should == 'X'
+	context "concatenates numerals in descending order until they sum up the desired integer" do
+		it "II is equivalent to 2" do
+			2.to_roman.should == 'II'
+		end 
 	end
 end
