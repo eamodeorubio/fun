@@ -3,6 +3,8 @@ class Fixnum
 
 	def to_roman
 		return ARABIC_TO_ROMAN_NUMERAL[self] if ARABIC_TO_ROMAN_NUMERAL[self]
+		return 'X' + (self - 10).to_roman if self > 10
+		return 'V' + (self - 5).to_roman if self > 5
 		'I' + (self - 1).to_roman
 	end
 end
@@ -29,6 +31,22 @@ describe "Roman number" do
 
 		it "III is equivalent to 3" do
 			3.to_roman.should == 'III'
+		end 
+
+		it "VI is equivalent to 6" do
+			6.to_roman.should == 'VI'
+		end 
+
+		it "XI is equivalent to 11" do
+			11.to_roman.should == 'XI'
+		end
+
+		it "XV is equivalent to 15" do
+			15.to_roman.should == 'XV'
+		end 
+
+		it "XX is equivalent to 20" do
+			20.to_roman.should == 'XX'
 		end 
 	end
 end
