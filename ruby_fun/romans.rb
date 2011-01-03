@@ -26,5 +26,9 @@ describe "Roman number" do
 		it "II is equivalent to 2" do
 			2.to_roman.should == 'II'
 		end 
+
+		it "III is equivalent to 3" do
+			3.to_roman.should == 'III'
+		end 
 	end
 end
