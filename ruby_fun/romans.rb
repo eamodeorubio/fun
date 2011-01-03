@@ -1,8 +1,8 @@
 class Fixnum 
+	ARABIC_TO_ROMAN_NUMERAL = { 10 => 'X', 5 => 'V', 1 => 'I' }
+
 	def to_roman
-		return 'X' if self == 10
-		return 'V' if self == 5
-		'I'
+		ARABIC_TO_ROMAN_NUMERAL[self]
 	end
 end
 
