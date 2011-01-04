@@ -1,5 +1,5 @@
 class Fixnum 
-	ARABIC_TO_ROMAN_NUMERAL = { 10 => 'X', 5 => 'V', 1 => 'I' }.sort.reverse
+	ARABIC_TO_ROMAN_NUMERAL = { 10 => 'X', 9 => 'IX', 5 => 'V', 4 => 'IV', 1 => 'I' }.sort.reverse
 
 	def to_roman
 		return '' if self == 0
@@ -15,8 +15,16 @@ describe "Roman number" do
 			1.to_roman.should == 'I'
 		end
 
+		it "IV is equivalent to 4" do 
+			4.to_roman.should == 'IV'
+		end
+
 		it "V is equivalent to 5" do
 			5.to_roman.should == 'V'
+		end
+
+		it "IX is equivalent to 9" do 
+			9.to_roman.should == 'IX'
 		end
 
 		it "X is equivalent to 10" do
