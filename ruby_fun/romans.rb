@@ -57,4 +57,18 @@ describe "Roman number" do
 			20.to_roman.should == 'XX'
 		end 
 	end
+
+	context "converts even complex examples (to gain more trust in our implementation)" do
+		it "XVIII is equivalent to 18" do 
+			18.to_roman.should == 'XVIII'
+		end
+
+		it "XIX is equivalent to 19" do 
+			19.to_roman.should == 'XIX'
+		end
+
+		it "XXXVII is equivalent to 37" do 
+			37.to_roman.should == 'XXXVII'
+		end
+	end
 end
