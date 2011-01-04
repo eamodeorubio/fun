@@ -3,9 +3,9 @@ class Fixnum
 
 	def to_roman
 		return ARABIC_TO_ROMAN_NUMERAL[self] if ARABIC_TO_ROMAN_NUMERAL[self]
-		return 'X' + (self - 10).to_roman if self > 10
-		return 'V' + (self - 5).to_roman if self > 5
-		'I' + (self - 1).to_roman
+		ARABIC_TO_ROMAN_NUMERAL.each do | arabic_number, roman_numeral |
+			return roman_numeral + (self - arabic_number).to_roman if self > arabic_number
+		end
 	end
 end
 
